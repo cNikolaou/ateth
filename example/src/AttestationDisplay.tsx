@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
-import { ethers } from 'ethers';
 import { useAttestation, contracts } from 'ateth';
 
 import { useEthersSigner } from './useEthersSigner';
@@ -11,7 +10,6 @@ export default function AttestationDisplay() {
   const [attestationUID, setAttestationUID] = useState('');
   const [attestationUIDInput, setAttestationUIDInput] = useState('');
 
-  console.debug('Render: chain', chain, 'Render: contracts', contracts);
   const EASContractAddress = chain ? contracts[chain.name]?.eas : undefined;
 
   const signer = useEthersSigner();

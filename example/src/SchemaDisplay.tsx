@@ -10,7 +10,6 @@ export default function SchemaDisplay() {
   const [schemaUID, setSchemaUID] = useState('');
   const [schemaUIDInput, setSchemaUIDInput] = useState('');
 
-  console.debug('Render: chain', chain, 'Render: contracts', contracts);
   const schemaRegistryContractAddress = chain ? contracts[chain.name]?.schemaRegistry : undefined;
 
   const signer = useEthersSigner();

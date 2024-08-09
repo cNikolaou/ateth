@@ -8,3 +8,18 @@ export const contracts = {
     schemaRegistry: '0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0',
   },
 };
+
+export const DEFAULT_RESOLVER_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+export const schemaFieldTypes = [
+  'address',
+  'string',
+  'bool',
+  'bytes32',
+  'bytes',
+  'uint8',
+  'uint32',
+  'uint64',
+  'uint128',
+  'uint256',
+];

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { getAttestation, getSchema } from './core';
+import { getAttestation, getSchema, registerSchema } from './core';
 
 /**
  * @typedef {import('@ethereum-attestation-service/eas-sdk').SchemaRecord} SchemaRecord
@@ -31,8 +31,8 @@ export function useSchema(signer, schemaRegistryContractAddress, schemaUID) {
   async function fetchSchema() {
     console.debug('[Function: fetchSchema]', signer, schemaRegistryContractAddress, schemaUID);
     try {
+      resetState();
       if (schemaUID === '') {
-        resetState();
         return;
       }
 
@@ -71,8 +71,8 @@ export function useAttestation(signer, EASContractAddress, attestationUID) {
   async function fetchAttestation() {
     console.debug('[Function: fetchAttestation]', signer, EASContractAddress, attestationUID);
     try {
+      resetState();
       if (attestationUID === '') {
-        resetState();
         return;
       }
 
@@ -89,4 +89,41 @@ export function useAttestation(signer, EASContractAddress, attestationUID) {
   }
 
   return { attestation, error, fetchAttestation };
+}
+
+/**
+ *
+ * @param {Wallet} signer
+ * @param {string} schemaRegistryContractAddress
+ * @returns {Promise<SchemaRecord>}
+ */
+export function useSchemaRegister(signer, schemaRegistryContractAddress) {
+  const DEFAULT_SCHEMA_MESSAGE = 'No Schema';
+
+  const [error, setError] = useState(null);
+  const [schemaAddress, setSchemaAddress] = useState(DEFAULT_SCHEMA_MESSAGE);
+
+  function resetState() {
+    setError(null);
+    setSchemaAddress(DEFAULT_SCHEMA_MESSAGE);
+  }
+
+  async function createSchema(schemaDef) {
+    console.debug('[Function: createSchema]', signer, schemaRegistryContractAddress, schemaDef);
+    try {
+      resetState();
+      if (signer && schemaRegistryContractAddress && schemaDef.schemaRaw) {
+        const record = await registerSchema(signer, schemaRegistryContractAddress, schemaDef);
+        setSchemaAddress(record);
+      }
+    } catch (err) {
+      console.log(err);
+      resetState();
+      setError(
+        err instanceof Error ? err : new Error('An error occurred while fetching the schem'),
+      );
+    }
+  }
+
+  return { schemaAddress, error, createSchema };
 }

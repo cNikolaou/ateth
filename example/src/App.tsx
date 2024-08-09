@@ -2,6 +2,7 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 import SchemaDisplay from './SchemaDisplay';
 import AttestationDisplay from './AttestationDisplay';
+import SchemaRegister from './SchemaRegister';
 
 function App() {
   const account = useAccount();
@@ -13,6 +14,7 @@ function App() {
       <div>
         <SchemaDisplay />
         <AttestationDisplay />
+        <SchemaRegister />
         <h2>Account</h2>
 
         <div>
