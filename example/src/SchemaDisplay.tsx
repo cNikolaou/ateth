@@ -32,7 +32,7 @@ export default function SchemaDisplay() {
 
   return (
     <>
-      <h2>Schema Display</h2>
+      <h2>Display Schema</h2>
       <label htmlFor="schema-uid">SchemaUID: </label>
       <input type="text" id="schema-uid" onChange={(e) => setSchemaUIDInput(e.target.value)} />
       <button onClick={() => setSchemaUID(schemaUIDInput)}>Search Schema</button>

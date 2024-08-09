@@ -54,7 +54,7 @@ export default function AttestationCreate() {
 
   return (
     <>
-      <h2>Attestation Create</h2>
+      <h2>Create New Attestation</h2>
       <div>
         <label htmlFor="attestation-data">Attestation Data (as JSON): </label>
         <textarea

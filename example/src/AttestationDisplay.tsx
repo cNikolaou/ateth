@@ -32,7 +32,7 @@ export default function AttestationDisplay() {
 
   return (
     <>
-      <h2>Attestation Display</h2>
+      <h2>Display Attestation</h2>
       <label htmlFor="attestation-uid">AttestationUID:</label>
       <input
         type="text"

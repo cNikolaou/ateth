@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { useAccount } from 'wagmi';
 import { useSchemaRegister, contracts } from 'ateth';
@@ -31,7 +31,7 @@ export default function SchemaRegister() {
 
   return (
     <>
-      <h2>Schema Register</h2>
+      <h2>Register New Schema</h2>
       <div>
         <label htmlFor="schema-schema">Schema: </label>
         <input
