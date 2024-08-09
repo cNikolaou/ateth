@@ -1,11 +1,11 @@
+import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
-import { useSchema, contracts, useCreateAttestation } from 'ateth';
+import { useSchema, useCreateAttestation, useEthersSigner } from '../hooks';
+import { contracts } from '../config';
 
-import { useEthersSigner } from './useEthersSigner';
-
-export default function AttestationCreate() {
+export function AttestationCreate() {
   const { chain, isConnected } = useAccount();
   const [attestationRawData, setAttestationRawData] = useState('');
   const [schemaUID, setSchemaUID] = useState('');
@@ -13,8 +13,8 @@ export default function AttestationCreate() {
   const [isRevocable, setIsRevocable] = useState(false);
   const [expirationTime, setExpirationTime] = useState(BigInt(0));
 
-  const schemaRegistryContractAddress = chain ? contracts[chain.name]?.schemaRegistry : undefined;
-  const EASContractAddress = chain ? contracts[chain.name]?.eas : undefined;
+  const schemaRegistryContractAddress = chain ? contracts[chain.id]?.schemaRegistry : undefined;
+  const EASContractAddress = chain ? contracts[chain.id]?.eas : undefined;
 
   const signer = useEthersSigner();
   const {

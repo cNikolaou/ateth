@@ -1,16 +1,17 @@
+import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
-import { useSchema, contracts } from 'ateth';
+import { useSchema, useEthersSigner } from '../hooks';
 
-import { useEthersSigner } from './useEthersSigner';
+import { contracts } from '../config';
 
-export default function SchemaDisplay() {
+export function SchemaDisplay() {
   const { chain, isConnected } = useAccount();
   const [schemaUID, setSchemaUID] = useState('');
   const [schemaUIDInput, setSchemaUIDInput] = useState('');
 
-  const schemaRegistryContractAddress = chain ? contracts[chain.name]?.schemaRegistry : undefined;
+  const schemaRegistryContractAddress = chain ? contracts[chain.id]?.schemaRegistry : undefined;
 
   const signer = useEthersSigner();
   const { schema, error, fetchSchema } = useSchema(

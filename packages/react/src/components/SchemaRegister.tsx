@@ -1,17 +1,18 @@
+import * as React from 'react';
 import { useState } from 'react';
 
 import { useAccount } from 'wagmi';
-import { useSchemaRegister, contracts } from 'ateth';
+import { useSchemaRegister, useEthersSigner } from '../hooks';
 
-import { useEthersSigner } from './useEthersSigner';
+import { contracts } from '../config';
 
-export default function SchemaRegister() {
+export function SchemaRegister() {
   const { chain, isConnected } = useAccount();
   const [schemaRaw, setSchemaRaw] = useState('');
   const [isRevocable, setIsRevocable] = useState(false);
   const [resolverAddress, setResolverAddress] = useState('');
 
-  const schemaRegistryContractAddress = chain ? contracts[chain.name]?.schemaRegistry : undefined;
+  const schemaRegistryContractAddress = chain ? contracts[chain.id]?.schemaRegistry : undefined;
 
   const signer = useEthersSigner();
   const { schemaUID, error, registerNewSchema } = useSchemaRegister(
