@@ -16,7 +16,7 @@
     "react-dom": "^18.3.1",
     "viem": "latest",
     "wagmi": "latest",
-    "ateth": "workspace:ateth@0.0.1"
+    "ateth": "workspace:ateth*"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.0",

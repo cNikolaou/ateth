@@ -14,7 +14,7 @@ importers:
         specifier: 5.45.1
         version: 5.45.1(react@18.3.1)
       ateth:
-        specifier: workspace:ateth@0.0.1
+        specifier: workspace:ateth*
         version: link:../packages/react
       ethers:
         specifier: ^6.13.2
