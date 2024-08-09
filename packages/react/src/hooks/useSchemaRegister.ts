@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Wallet, JsonRpcSigner } from 'ethers';
 
-import { registerSchema, type SchemaDef } from '../core';
+import { registerSchema, type SchemaDef } from '@ateth/core';
 
 export function useSchemaRegister(
   signer: Wallet | JsonRpcSigner | undefined,

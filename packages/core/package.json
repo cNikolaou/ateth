@@ -1,10 +1,9 @@
 {
-  "name": "ateth",
-  "version": "0.0.3",
+  "name": "@ateth/core",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
@@ -14,18 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ateth/core": "workspace:*",
     "@ethereum-attestation-service/eas-sdk": "^2.5.0",
-    "ethers": "^6.13.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "viem": "~2.19.3",
-    "wagmi": "^2.12.5"
+    "ethers": "^6.13.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.5.4"
   },
   "exports": "./dist/index.js"
 }

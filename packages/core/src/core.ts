@@ -7,7 +7,7 @@ import {
 } from '@ethereum-attestation-service/eas-sdk';
 import { Wallet, JsonRpcSigner } from 'ethers';
 
-import { DEFAULT_RESOLVER_ADDRESS } from './config';
+const DEFAULT_RESOLVER_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export async function getSchema(
   signer: Wallet | JsonRpcSigner,

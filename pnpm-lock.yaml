@@ -57,8 +57,24 @@ importers:
         specifier: ^5.2.11
         version: 5.4.0(@types/node@22.2.0)(terser@5.31.5)
 
+  packages/core:
+    dependencies:
+      '@ethereum-attestation-service/eas-sdk':
+        specifier: ^2.5.0
+        version: 2.5.0(bufferutil@4.0.8)(typescript@5.5.4)(utf-8-validate@5.0.10)
+      ethers:
+        specifier: ^6.13.2
+        version: 6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    devDependencies:
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
+
   packages/react:
     dependencies:
+      '@ateth/core':
+        specifier: workspace:*
+        version: link:../core
       '@ethereum-attestation-service/eas-sdk':
         specifier: ^2.5.0
         version: 2.5.0(bufferutil@4.0.8)(typescript@5.5.4)(utf-8-validate@5.0.10)

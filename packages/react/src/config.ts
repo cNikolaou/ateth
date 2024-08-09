@@ -14,8 +14,6 @@ export const contracts: {[chainId: number]: ContractAddresses} = {
   },
 };
 
-export const DEFAULT_RESOLVER_ADDRESS = '0x0000000000000000000000000000000000000000';
-
 export const schemaFieldTypes = [
   'address',
   'string',
