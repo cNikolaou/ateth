@@ -16,12 +16,14 @@
   "dependencies": {
     "@ethereum-attestation-service/eas-sdk": "^2.5.0",
     "ethers": "^6.13.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "viem": "~2.19.3",
+    "wagmi": "^2.12.5"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "typescript": "^5.2.2"
   },
   "exports": "./dist/index.js"
