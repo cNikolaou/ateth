@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
 import { useSchemaRegister, contracts } from 'ateth';
@@ -14,14 +14,14 @@ export default function SchemaRegister() {
   const schemaRegistryContractAddress = chain ? contracts[chain.name]?.schemaRegistry : undefined;
 
   const signer = useEthersSigner();
-  const { schemaAddress, error, createSchema } = useSchemaRegister(
+  const { schemaUID, error, registerNewSchema } = useSchemaRegister(
     signer,
     schemaRegistryContractAddress,
   );
 
   function handleCreate() {
     if (schemaRaw !== '') {
-      createSchema({ schemaRaw });
+      registerNewSchema({ schemaRaw });
     }
   }
 
@@ -63,7 +63,7 @@ export default function SchemaRegister() {
       {error ? (
         <div>Error when creating schema {error.message}</div>
       ) : (
-        <div>Schema address: {schemaAddress}.</div>
+        <div>SchemaUID: {schemaUID}.</div>
       )}
     </>
   );

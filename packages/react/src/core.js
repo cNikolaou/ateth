@@ -1,4 +1,4 @@
-import { EAS, SchemaRegistry } from '@ethereum-attestation-service/eas-sdk';
+import { EAS, SchemaEncoder, SchemaRegistry } from '@ethereum-attestation-service/eas-sdk';
 import { DEFAULT_RESOLVER_ADDRESS } from './config';
 
 /**
@@ -69,12 +69,71 @@ export async function registerSchema(signer, schemaRegistryContractAddress, sche
     revocable,
   };
 
-  console.log('[Function: registerSchema] schema', schema);
+  console.debug('[Function: registerSchema] schema', schema);
 
   const transaction = await schemaRegistry.register(schema);
-  const newSchemaAddress = await transaction.wait();
+  const newSchemaUID = await transaction.wait();
 
-  console.debug('[Function: registerSchema] newSchemaAddress', newSchemaAddress);
+  console.debug('[Function: registerSchema] newSchemaUID', newSchemaUID);
 
-  return newSchemaAddress;
+  return newSchemaUID;
+}
+
+/**
+ * @typedef {Object} AttestationData
+ * @property {string} name
+ * @property {string} value
+ * @property {boolean} fieldType
+ */
+
+/**
+ *
+ * @param {Wallet} signer
+ * @param {string} EASContractAddress
+ * @param {SchemaRecord} schema
+ * @param {string} recipient
+ * @param {number} expirationTime
+ * @param {boolean} revocable
+ * @param {AttestationData[]} data
+ */
+export async function createAttestation(
+  signer,
+  EASContractAddress,
+  schema,
+  recipient,
+  expirationTime,
+  revocable,
+  data,
+) {
+  console.debug(
+    '[Function: createAttestation]',
+    signer,
+    EASContractAddress,
+    schema,
+    recipient,
+    expirationTime,
+    revocable,
+    data,
+  );
+  const eas = new EAS(EASContractAddress);
+  eas.connect(signer);
+
+  const schemaEncoder = new SchemaEncoder(schema.schema);
+  const encodedData = schemaEncoder.encodeData(data);
+
+  const tx = await eas.attest({
+    schema: schema.uid,
+    data: {
+      recipient,
+      expirationTime,
+      revocable,
+      data: encodedData,
+    },
+  });
+
+  const newAttestationUID = await tx.wait();
+
+  console.debug('[Function: createAttestation] newAttestationUID', newAttestationUID);
+
+  return newAttestationUID;
 }

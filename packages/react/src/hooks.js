@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { getAttestation, getSchema, registerSchema } from './core';
+import { getAttestation, getSchema, registerSchema, createAttestation } from './core';
 
 /**
  * @typedef {import('@ethereum-attestation-service/eas-sdk').SchemaRecord} SchemaRecord
@@ -101,20 +101,25 @@ export function useSchemaRegister(signer, schemaRegistryContractAddress) {
   const DEFAULT_SCHEMA_MESSAGE = 'No Schema';
 
   const [error, setError] = useState(null);
-  const [schemaAddress, setSchemaAddress] = useState(DEFAULT_SCHEMA_MESSAGE);
+  const [schemaUID, setSchemaUID] = useState(DEFAULT_SCHEMA_MESSAGE);
 
   function resetState() {
     setError(null);
-    setSchemaAddress(DEFAULT_SCHEMA_MESSAGE);
+    setSchemaUID(DEFAULT_SCHEMA_MESSAGE);
   }
 
-  async function createSchema(schemaDef) {
-    console.debug('[Function: createSchema]', signer, schemaRegistryContractAddress, schemaDef);
+  async function registerNewSchema(schemaDef) {
+    console.debug(
+      '[Function: registerNewSchema]',
+      signer,
+      schemaRegistryContractAddress,
+      schemaDef,
+    );
     try {
       resetState();
       if (signer && schemaRegistryContractAddress && schemaDef.schemaRaw) {
         const record = await registerSchema(signer, schemaRegistryContractAddress, schemaDef);
-        setSchemaAddress(record);
+        setSchemaUID(record);
       }
     } catch (err) {
       console.log(err);
@@ -125,5 +130,65 @@ export function useSchemaRegister(signer, schemaRegistryContractAddress) {
     }
   }
 
-  return { schemaAddress, error, createSchema };
+  return { schemaUID, error, registerNewSchema };
+}
+
+/**
+ *
+ * @param {Wallet} signer
+ * @param {string} EASContractAddress
+ * @returns {Promise<SchemaRecord>}
+ */
+export function useCreateAttestation(signer, EASContractAddress) {
+  const DEFAULT_ATTESTATION_MESSAGE = 'No Attestation';
+
+  const [error, setError] = useState(null);
+  const [attestationUID, setAttestationUID] = useState(DEFAULT_ATTESTATION_MESSAGE);
+
+  function resetState() {
+    setError(null);
+    setAttestationUID(DEFAULT_ATTESTATION_MESSAGE);
+  }
+
+  async function createNewAttestation(
+    schema,
+    recipient,
+    expirationTime,
+    revocable,
+    attestationRawData,
+  ) {
+    console.debug(
+      '[Function: createNewAttestation]',
+      signer,
+      EASContractAddress,
+      schema,
+      recipient,
+      expirationTime,
+      revocable,
+      attestationRawData,
+    );
+    try {
+      resetState();
+      if (signer && EASContractAddress && schema && recipient && attestationRawData) {
+        const record = await createAttestation(
+          signer,
+          EASContractAddress,
+          schema,
+          recipient,
+          expirationTime,
+          revocable,
+          JSON.parse(attestationRawData),
+        );
+        setAttestationUID(record);
+      }
+    } catch (err) {
+      console.log(err);
+      resetState();
+      setError(
+        err instanceof Error ? err : new Error('An error occurred while fetching the schem'),
+      );
+    }
+  }
+
+  return { attestationUID, error, createNewAttestation };
 }
