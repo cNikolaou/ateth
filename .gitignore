@@ -1,2 +1,4 @@
 # don't track the node_modules dirs
 node_modules/
+
+dist/

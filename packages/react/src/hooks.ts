@@ -1,25 +1,24 @@
 import { useState } from 'react';
+import { Attestation, SchemaRecord } from '@ethereum-attestation-service/eas-sdk';
+import { Wallet, JsonRpcSigner } from 'ethers';
 
-import { getAttestation, getSchema, registerSchema, createAttestation } from './core';
+import {
+  getAttestation,
+  getSchema,
+  registerSchema,
+  createAttestation,
+  type SchemaDef,
+} from './core';
 
-/**
- * @typedef {import('@ethereum-attestation-service/eas-sdk').SchemaRecord} SchemaRecord
- * @typedef {import('@ethereum-attestation-service/eas-sdk').Attestation} Attestation
- * @typedef {import('ethers').Wallet} Wallet
- */
-
-/**
- *
- * @param {Wallet} signer
- * @param {string} schemaRegistryContractAddress
- * @param {string} schemaUID
- * @returns {Promise<SchemaRecord>}
- */
-export function useSchema(signer, schemaRegistryContractAddress, schemaUID) {
+export function useSchema(
+  signer: Wallet | JsonRpcSigner | undefined,
+  schemaRegistryContractAddress: string | undefined,
+  schemaUID: string,
+) {
   const DEFAULT_SCHEMA_MESSAGE = 'No Schema';
 
-  const [error, setError] = useState(null);
-  const [schemaRecord, setSchemaRecord] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [schemaRecord, setSchemaRecord] = useState<SchemaRecord | null>(null);
   const [schema, setSchema] = useState(DEFAULT_SCHEMA_MESSAGE);
 
   function resetState() {
@@ -52,16 +51,13 @@ export function useSchema(signer, schemaRegistryContractAddress, schemaUID) {
   return { schemaRecord, schema, error, fetchSchema };
 }
 
-/**
- *
- * @param {Wallet} signer
- * @param {string} EASContractAddress
- * @param {string} attestationUID
- * @returns {Promise<Attestation>}
- */
-export function useAttestation(signer, EASContractAddress, attestationUID) {
-  const [error, setError] = useState(null);
-  const [attestation, setAttestation] = useState(null);
+export function useAttestation(
+  signer: Wallet | JsonRpcSigner | undefined,
+  EASContractAddress: string | undefined,
+  attestationUID: string,
+) {
+  const [error, setError] = useState<Error | null>(null);
+  const [attestation, setAttestation] = useState<Attestation | null>(null);
 
   function resetState() {
     setError(null);
@@ -91,16 +87,13 @@ export function useAttestation(signer, EASContractAddress, attestationUID) {
   return { attestation, error, fetchAttestation };
 }
 
-/**
- *
- * @param {Wallet} signer
- * @param {string} schemaRegistryContractAddress
- * @returns {Promise<SchemaRecord>}
- */
-export function useSchemaRegister(signer, schemaRegistryContractAddress) {
+export function useSchemaRegister(
+  signer: Wallet | JsonRpcSigner | undefined,
+  schemaRegistryContractAddress: string | undefined,
+) {
   const DEFAULT_SCHEMA_MESSAGE = 'No Schema';
 
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
   const [schemaUID, setSchemaUID] = useState(DEFAULT_SCHEMA_MESSAGE);
 
   function resetState() {
@@ -108,7 +101,7 @@ export function useSchemaRegister(signer, schemaRegistryContractAddress) {
     setSchemaUID(DEFAULT_SCHEMA_MESSAGE);
   }
 
-  async function registerNewSchema(schemaDef) {
+  async function registerNewSchema(schemaDef: SchemaDef) {
     console.debug(
       '[Function: registerNewSchema]',
       signer,
@@ -133,16 +126,13 @@ export function useSchemaRegister(signer, schemaRegistryContractAddress) {
   return { schemaUID, error, registerNewSchema };
 }
 
-/**
- *
- * @param {Wallet} signer
- * @param {string} EASContractAddress
- * @returns {Promise<SchemaRecord>}
- */
-export function useCreateAttestation(signer, EASContractAddress) {
+export function useCreateAttestation(
+  signer: Wallet | JsonRpcSigner | undefined,
+  EASContractAddress: string | undefined,
+) {
   const DEFAULT_ATTESTATION_MESSAGE = 'No Attestation';
 
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
   const [attestationUID, setAttestationUID] = useState(DEFAULT_ATTESTATION_MESSAGE);
 
   function resetState() {
@@ -151,11 +141,11 @@ export function useCreateAttestation(signer, EASContractAddress) {
   }
 
   async function createNewAttestation(
-    schema,
-    recipient,
-    expirationTime,
-    revocable,
-    attestationRawData,
+    schema: SchemaRecord,
+    recipient: string,
+    expirationTime: bigint,
+    revocable: boolean,
+    attestationRawData: string,
   ) {
     console.debug(
       '[Function: createNewAttestation]',

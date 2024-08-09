@@ -1,20 +1,19 @@
-import { EAS, SchemaEncoder, SchemaRegistry } from '@ethereum-attestation-service/eas-sdk';
+import {
+  EAS,
+  SchemaEncoder,
+  SchemaRegistry,
+  type SchemaRecord,
+  type SchemaItem,
+} from '@ethereum-attestation-service/eas-sdk';
+import { Wallet, JsonRpcSigner } from 'ethers';
+
 import { DEFAULT_RESOLVER_ADDRESS } from './config';
 
-/**
- * @typedef {import('@ethereum-attestation-service/eas-sdk').SchemaRecord} SchemaRecord
- * @typedef {import('@ethereum-attestation-service/eas-sdk').Attestation} Attestation
- * @typedef {import('ethers').Wallet} Wallet
- */
-
-/**
- *
- * @param {Wallet} signer
- * @param {string} schemaRegistryContractAddress
- * @param {string} schemaUID
- * @returns {Promise<SchemaRecord>}
- */
-export async function getSchema(signer, schemaRegistryContractAddress, schemaUID) {
+export async function getSchema(
+  signer: Wallet | JsonRpcSigner,
+  schemaRegistryContractAddress: string,
+  schemaUID: string,
+) {
   console.debug('[Function: getSchema] ', signer, schemaRegistryContractAddress, schemaUID);
   const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
   schemaRegistry.connect(signer);
@@ -22,14 +21,11 @@ export async function getSchema(signer, schemaRegistryContractAddress, schemaUID
   return schemaRecord;
 }
 
-/**
- *
- * @param {Wallet} signer
- * @param {string} EASContractAddress
- * @param {string} attestationUID
- * @returns {Promise<Attestation>}
- */
-export async function getAttestation(signer, EASContractAddress, attestationUID) {
+export async function getAttestation(
+  signer: Wallet | JsonRpcSigner,
+  EASContractAddress: string,
+  attestationUID: string,
+) {
   console.debug('[Function: getAttestation] ', signer, EASContractAddress, attestationUID);
 
   const eas = new EAS(EASContractAddress);
@@ -38,21 +34,17 @@ export async function getAttestation(signer, EASContractAddress, attestationUID)
   return attestation;
 }
 
-/**
- * @typedef {Object} SchemaDef
- * @property {string} schemaRaw
- * @property {string} [resolverAddress]
- * @property {boolean} [revocable]
- */
+export type SchemaDef = {
+  schemaRaw: string;
+  resolverAddress?: string;
+  revocable?: boolean;
+};
 
-/**
- *
- * @param {Wallet} signer
- * @param {string} schemaRegistryContractAddress
- * @param {SchemaDef} schemaDef
- * @returns {Promise<string>}
- */
-export async function registerSchema(signer, schemaRegistryContractAddress, schemaDef) {
+export async function registerSchema(
+  signer: Wallet | JsonRpcSigner,
+  schemaRegistryContractAddress: string,
+  schemaDef: SchemaDef,
+) {
   console.debug('[Function: registerSchema] ', signer, schemaRegistryContractAddress, schemaDef);
 
   // TODO: Add validation for schema types
@@ -79,31 +71,14 @@ export async function registerSchema(signer, schemaRegistryContractAddress, sche
   return newSchemaUID;
 }
 
-/**
- * @typedef {Object} AttestationData
- * @property {string} name
- * @property {string} value
- * @property {boolean} fieldType
- */
-
-/**
- *
- * @param {Wallet} signer
- * @param {string} EASContractAddress
- * @param {SchemaRecord} schema
- * @param {string} recipient
- * @param {number} expirationTime
- * @param {boolean} revocable
- * @param {AttestationData[]} data
- */
 export async function createAttestation(
-  signer,
-  EASContractAddress,
-  schema,
-  recipient,
-  expirationTime,
-  revocable,
-  data,
+  signer: Wallet | JsonRpcSigner,
+  EASContractAddress: string,
+  schema: SchemaRecord,
+  recipient: string,
+  expirationTime: bigint,
+  revocable: boolean,
+  data: SchemaItem[],
 ) {
   console.debug(
     '[Function: createAttestation]',
