@@ -1,9 +1,9 @@
 type ContractAddresses = {
   eas: string;
   schemaRegistry: string;
-}
+};
 
-export const contracts: {[chainId: number]: ContractAddresses} = {
+export const contracts: { [chainId: number]: ContractAddresses } = {
   1: {
     eas: '0xA1207F3BBa224E2c9c3c6D5aF63D0eb1582Ce587',
     schemaRegistry: '0xA7b39296258348C78294F95B872b282326A97BDF',
