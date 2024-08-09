@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
+import { useSchema, contracts } from 'ateth';
 
 import { useEthersSigner } from './useEthersSigner';
-
-import { useSchema, contracts } from 'ateth';
 
 export default function SchemaDisplay() {
   const { chain, isConnected } = useAccount();
@@ -23,7 +22,7 @@ export default function SchemaDisplay() {
 
   useEffect(() => {
     if (signer && schemaRegistryContractAddress) {
-      console.debug('Fetching schema for:', signer, schemaRegistryContractAddress);
+      console.debug('Fetching schema:', signer, schemaRegistryContractAddress);
       fetchSchema();
     }
   }, [signer, chain, schemaUID]);
@@ -35,14 +34,11 @@ export default function SchemaDisplay() {
   return (
     <>
       <h2>Schema Display</h2>
+      <label htmlFor="schema-uid">SchemaUID: </label>
       <input type="text" id="schema-uid" onChange={(e) => setSchemaUIDInput(e.target.value)} />
       <button onClick={() => setSchemaUID(schemaUIDInput)}>Search Schema</button>
       <br />
-      {error ? (
-        <div>Error when fetching schema {error.message}</div>
-      ) : (
-        <label htmlFor="schema-uid">Schema: {schema}</label>
-      )}
+      {error ? <div>Error when fetching schema {error.message}</div> : <div>Shema: {schema}</div>}
     </>
   );
 }

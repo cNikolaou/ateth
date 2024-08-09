@@ -1,6 +1,7 @@
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 import SchemaDisplay from './SchemaDisplay';
+import AttestationDisplay from './AttestationDisplay';
 
 function App() {
   const account = useAccount();
@@ -11,6 +12,7 @@ function App() {
     <>
       <div>
         <SchemaDisplay />
+        <AttestationDisplay />
         <h2>Account</h2>
 
         <div>
