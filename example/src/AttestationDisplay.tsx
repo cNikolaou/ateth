@@ -49,8 +49,8 @@ export default function AttestationDisplay() {
           <li>Attester: {attestation.attester}</li>
           <li>Recipient: {attestation.recipient}</li>
           <li>Revocable: {attestation.revocable ? 'Yes' : 'No'}</li>
-          <li>Creation Time: {attestation.time}</li>
-          <li>Expiration Time: {attestation.expirationTime}</li>
+          <li>Creation Time: {attestation.time.toString()}</li>
+          <li>Expiration Time: {attestation.expirationTime.toString()}</li>
         </ul>
       ) : (
         <div>No data</div>

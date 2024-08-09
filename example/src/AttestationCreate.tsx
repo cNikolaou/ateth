@@ -11,7 +11,7 @@ export default function AttestationCreate() {
   const [schemaUID, setSchemaUID] = useState('');
   const [recipientAddress, setRecipientAddress] = useState('');
   const [isRevocable, setIsRevocable] = useState(false);
-  const [expirationTime, setExpirationTime] = useState(0);
+  const [expirationTime, setExpirationTime] = useState(BigInt(0));
 
   const schemaRegistryContractAddress = chain ? contracts[chain.name]?.schemaRegistry : undefined;
   const EASContractAddress = chain ? contracts[chain.name]?.eas : undefined;
@@ -37,7 +37,7 @@ export default function AttestationCreate() {
   }, [signer, chain, schemaUID]);
 
   function handleCreate() {
-    if (attestationRawData !== '' && schemaRecord !== '' && recipientAddress !== '') {
+    if (attestationRawData !== '' && schemaRecord && recipientAddress !== '') {
       createNewAttestation(
         schemaRecord,
         recipientAddress,
@@ -79,6 +79,15 @@ export default function AttestationCreate() {
           id="recipient-address"
           value={recipientAddress}
           onChange={(e) => setRecipientAddress(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="attestation-expiration">Expiration time: </label>
+        <input
+          type="text"
+          id="attestation-expiration"
+          value={recipientAddress}
+          onChange={(e) => setExpirationTime(BigInt(e.target.value))}
         />
       </div>
       <div>
