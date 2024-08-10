@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 
-import { contracts, chainNameToId, getAttestation, getSchema } from '@ateth/core';
+import { contracts, chainNameToId, getAttestation, getSchema, registerSchema } from '@ateth/core';
 
 import { hasValidEnvVars, getSigner } from './utils.js';
 
@@ -58,6 +58,37 @@ program
     }
     if (!thisCommand.opts().uid) {
       console.error('You need to specify the Schema UID with "-u, --uid <schemaUID>"');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('register-schema')
+  .option('-n, --network <network>', 'specify the network (e.g. ethereum, sepolia, optimism)')
+  .option('-s, --schema <schema>', 'schema to be registered')
+  .option('-r, --revocable', '[optional] schema will be revocable')
+  .option('-a, --resolver-address', '[optional] address of the resolver contract to use')
+  .action(async (options) => {
+    const signer = await getSigner(options.network);
+    const schemaRegistryContractAddress = contracts[chainNameToId[options.network]]?.schemaRegistry;
+
+    console.log(options);
+
+    const schemaUID = await registerSchema(signer, schemaRegistryContractAddress, {
+      schemaRaw: options.schema,
+      revocable: options.revocable || false,
+      ...(options.resolverAddress && { resolverAddress: options.resolverAddress }),
+    });
+
+    console.log('UID of the registered schema', schemaUID);
+  })
+  .hook('preAction', (thisCommand) => {
+    if (!thisCommand.opts().network) {
+      console.error('You need to specify the network with "-n, --network <network>"');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().schema) {
+      console.error('You need to specify the schema to register "-s, --schema <schema>"');
       process.exit(1);
     }
   });
