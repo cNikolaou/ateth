@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@ateth/core": "workspace:*",
     "@ethereum-attestation-service/eas-sdk": "^2.5.0",
