@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
+import { contracts } from '@ateth/core';
 
-import { contracts } from '../config';
 import { useAttestation, useEthersSigner } from '../hooks';
 
 export function AttestationDisplay() {

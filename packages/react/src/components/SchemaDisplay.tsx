@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
-import { useSchema, useEthersSigner } from '../hooks';
+import { contracts } from '@ateth/core';
 
-import { contracts } from '../config';
+import { useSchema, useEthersSigner } from '../hooks';
 
 export function SchemaDisplay() {
   const { chain, isConnected } = useAccount();
