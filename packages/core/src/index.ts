@@ -1,2 +1,2 @@
-export * from './core';
-export * from './config';
+export * from './main.js';
+export * from './config.js';
