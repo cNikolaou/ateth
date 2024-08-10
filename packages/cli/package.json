@@ -14,7 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^12.1.0",
-    "ethers": "^6.13.2"
+    "ethers": "^6.13.2",
+    "@ateth/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.2.0"
