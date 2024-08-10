@@ -14,6 +14,15 @@ export const contracts: { [chainId: number]: ContractAddresses } = {
   },
 };
 
+export const chainNameToId: { [chainName: string]: number } = {
+  ethereum: 1,
+  sepolia: 11155111,
+  optimism: 10,
+  'optimism-sepolia': 11155420,
+  base: 8453,
+  'base=sepolia': 84532,
+};
+
 export const schemaFieldTypes = [
   'address',
   'string',
