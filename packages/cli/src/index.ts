@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 
-import { contracts, chainNameToId, getAttestation } from '@ateth/core';
+import { contracts, chainNameToId, getAttestation, getSchema } from '@ateth/core';
 
 import { hasValidEnvVars, getSigner } from './utils.js';
 
@@ -35,6 +35,29 @@ program
     }
     if (!thisCommand.opts().uid) {
       console.error('You need to specify the Attestation UID with "-u, --uid <attestationUID>"');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('get-schema')
+  .option('-n, --network <network>', 'specify the network (e.g. ethereum, sepolia, optimism)')
+  .option('-u, --uid <schemaUID>', 'UID of the schema to fetch')
+  .action(async (options) => {
+    const signer = await getSigner(options.network);
+    const schemaRegistryContractAddress = contracts[chainNameToId[options.network]]?.schemaRegistry;
+
+    const schemaRecord = await getSchema(signer, schemaRegistryContractAddress, options.uid);
+
+    console.log(schemaRecord);
+  })
+  .hook('preAction', (thisCommand) => {
+    if (!thisCommand.opts().network) {
+      console.error('You need to specify the network with "-n, --network <network>"');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().uid) {
+      console.error('You need to specify the Schema UID with "-u, --uid <schemaUID>"');
       process.exit(1);
     }
   });
