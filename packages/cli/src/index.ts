@@ -1,6 +1,13 @@
 import { Command } from 'commander';
 
-import { contracts, chainNameToId, getAttestation, getSchema, registerSchema } from '@ateth/core';
+import {
+  contracts,
+  chainNameToId,
+  getAttestation,
+  getSchema,
+  registerSchema,
+  createAttestation,
+} from '@ateth/core';
 
 import { hasValidEnvVars, getSigner } from './utils.js';
 
@@ -72,8 +79,6 @@ program
     const signer = await getSigner(options.network);
     const schemaRegistryContractAddress = contracts[chainNameToId[options.network]]?.schemaRegistry;
 
-    console.log(options);
-
     const schemaUID = await registerSchema(signer, schemaRegistryContractAddress, {
       schemaRaw: options.schema,
       revocable: options.revocable || false,
@@ -89,6 +94,67 @@ program
     }
     if (!thisCommand.opts().schema) {
       console.error('You need to specify the schema to register "-s, --schema <schema>"');
+      process.exit(1);
+    }
+  });
+
+program
+  .command('create-attestation')
+  .option('-n, --network <network>', 'specify the network (e.g. ethereum, sepolia, optimism)')
+  .option('-u, --uid <schemaUID>', 'UID of the schema to create the attestation for')
+  .option(
+    '-d, --data <attestationData>',
+    "data for the attestation; should be in JSON format and enclosed in '' quotes",
+  )
+  .option('-r, --recipient <address>', 'address of the recipient for the attestation')
+  .option(
+    '-e, --expiration <int>',
+    '(optional) expiration time for the attestation (BigInt as string)',
+  )
+  .option('--revocable', '(optional )whether the attestation is revocable')
+  .action(async (options) => {
+    const signer = await getSigner(options.network);
+    const schemaRegistryContractAddress = contracts[chainNameToId[options.network]]?.schemaRegistry;
+    const EASContractAddress = contracts[chainNameToId[options.network]]?.eas;
+
+    const schema = await getSchema(signer, schemaRegistryContractAddress, options.uid);
+
+    console.log(schema);
+    console.log(options);
+    console.log('JSON.parse(options.data)');
+    console.log(JSON.parse(options.data));
+
+    const expiration = BigInt(options.expiration || 0);
+
+    const attestationUID = await createAttestation(
+      signer,
+      EASContractAddress,
+      schema,
+      options.recipient,
+      expiration,
+      options.revocable || false,
+      JSON.parse(options.data),
+    );
+
+    console.log('UID of the created attestation', attestationUID);
+  })
+  .hook('preAction', (thisCommand) => {
+    if (!thisCommand.opts().network) {
+      console.error('You need to specify the network with "-n, --network <network>"');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().uid) {
+      console.error('You need to specify the Schema UID with "-u, --uid <schemaUID>"');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().data) {
+      console.error('You need to specify the data for the attestation that follows the schema');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().recipient) {
+      console.error(
+        'You need to specify the attestation recipient address  "-r, --recipient <schemaUID>"',
+      );
       process.exit(1);
     }
   });
