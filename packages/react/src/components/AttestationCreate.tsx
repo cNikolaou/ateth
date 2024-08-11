@@ -86,7 +86,7 @@ export function AttestationCreate() {
         <input
           type="text"
           id="attestation-expiration"
-          value={recipientAddress}
+          value={expirationTime}
           onChange={(e) => setExpirationTime(BigInt(e.target.value))}
         />
       </div>
