@@ -35,7 +35,9 @@ export async function saveOffchainAttestation(offchainAttestation: SignedOffchai
   await fs.mkdirSync(attestationsDir, { recursive: true });
 
   const filePath = path.join(attestationsDir, offchainAttestation.uid);
-  const attestationString = JSON.stringify(offchainAttestation, null, 2);
+  const bigIntReplacer = (key, value) => (typeof value === 'bigint' ? value.toString() : value);
+
+  const attestationString = JSON.stringify(offchainAttestation, bigIntReplacer, 2);
 
   await fs.writeFileSync(filePath, attestationString, { encoding: 'utf8' });
   console.log(`Offhchain attestation saved tp ${filePath}`);
