@@ -12,6 +12,14 @@ export const contracts: { [chainId: number]: ContractAddresses } = {
     eas: '0xC2679fBD37d54388Ce493F1DB75320D236e1815e',
     schemaRegistry: '0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0',
   },
+  10: {
+    eas: '0x4200000000000000000000000000000000000021',
+    schemaRegistry: '0x4200000000000000000000000000000000000020',
+  },
+  11155420: {
+    eas: '0xE132c2E90274B44FfD8090b58399D04ddc060AE1',
+    schemaRegistry: '0x6dd0CB3C3711c8B5d03b3790e5339Bbc2Bbcf934',
+  },
 };
 
 export const chainNameToId: { [chainName: string]: number } = {
