@@ -112,6 +112,27 @@ export async function createAttestation(
 
   return newAttestationUID;
 }
+export async function revokeAttestation(
+  signer: Wallet | JsonRpcSigner,
+  EASContractAddress: string,
+  schema: SchemaRecord,
+  uid: string,
+) {
+  console.debug('[Function: revokeAttestation]', signer, EASContractAddress, uid);
+  const eas = new EAS(EASContractAddress);
+  eas.connect(signer);
+
+  const tx = await eas.revoke({
+    schema: schema.uid,
+    data: { uid: uid },
+  });
+
+  const result = await tx.wait();
+
+  console.debug('[Function: revokeAttestation] result', result);
+
+  return result;
+}
 
 export async function createOffchainAttestation(
   signer: Wallet | JsonRpcSigner,
