@@ -3,6 +3,8 @@ import path from 'path';
 import os from 'os';
 
 import { ethers } from 'ethers';
+import Table from 'cli-table3';
+import { type SignedOffchainAttestation } from '@ethereum-attestation-service/eas-sdk';
 
 export function hasValidEnvVars() {
   if (!process.env.WALLET_PRIVATE_KEY) {
@@ -41,4 +43,51 @@ export async function saveOffchainAttestation(offchainAttestation: SignedOffchai
 
   await fs.writeFileSync(filePath, attestationString, { encoding: 'utf8' });
   console.log(`Offhchain attestation saved tp ${filePath}`);
+}
+
+export async function listAttestations() {
+  const homeDir = os.homedir();
+  const attestationsDir = path.join(homeDir, '.attestations');
+
+  const table = new Table({
+    head: ['UID', 'Creation', 'Recipient'],
+  });
+
+  try {
+    const files = await fs.readdirSync(attestationsDir);
+
+    console.log(files);
+
+    for (const file of files) {
+      const filePath = path.join(attestationsDir, file);
+      const attestationContent = await fs.readFileSync(filePath, 'utf8');
+      const offchainAttestation: SignedOffchainAttestation = JSON.parse(attestationContent);
+
+      table.push([
+        offchainAttestation.uid,
+        offchainAttestation.message.time,
+        offchainAttestation.message.recipient,
+      ]);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  console.log(table.toString());
+}
+
+export async function showAttestation(uid: string) {
+  const homeDir = os.homedir();
+  const attestationsDir = path.join(homeDir, '.attestations');
+
+  try {
+    const filePath = path.join(attestationsDir, uid);
+    const attestationContent = await fs.readFileSync(filePath, 'utf8');
+    const offchainAttestation: SignedOffchainAttestation = JSON.parse(attestationContent);
+
+    console.log('Attestation Data');
+    console.log('----------------');
+    console.log(offchainAttestation);
+  } catch (err) {
+    console.error(err);
+  }
 }

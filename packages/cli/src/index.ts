@@ -10,7 +10,13 @@ import {
   createOffchainAttestation,
 } from '@attkit/core';
 
-import { hasValidEnvVars, getSigner, saveOffchainAttestation } from './utils.js';
+import {
+  hasValidEnvVars,
+  getSigner,
+  saveOffchainAttestation,
+  listAttestations,
+  showAttestation,
+} from './utils.js';
 
 const program = new Command();
 
@@ -121,11 +127,6 @@ program
 
     const schema = await getSchema(signer, schemaRegistryContractAddress, options.uid);
 
-    console.log(schema);
-    console.log(options);
-    console.log('JSON.parse(options.data)');
-    console.log(JSON.parse(options.data));
-
     const expirationTime = BigInt(options.expiration || 0);
 
     if (options.offchain) {
@@ -171,6 +172,22 @@ program
         'You need to specify the attestation recipient address  "-r, --recipient <schemaUID>"',
       );
       process.exit(1);
+    }
+  });
+
+program
+  .command('offchain-attestation')
+  .option('--list', 'list all offchain attestations')
+  .option('--show <uid>', 'show the data for the offchain attestation with UID <uid>')
+  .action(async (options) => {
+    console.log(options);
+    if (options.list) {
+      await listAttestations();
+      process.exit(0);
+    }
+    if (options.show) {
+      await showAttestation(options.show);
+      process.exit(0);
     }
   });
 
