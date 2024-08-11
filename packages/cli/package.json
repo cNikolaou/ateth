@@ -18,7 +18,8 @@
     "@ateth/core": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.2.0"
+    "@types/node": "^22.2.0",
+    "typescript": "^5.5.4"
   },
   "exports": "./dist/index.js",
   "bin": {
