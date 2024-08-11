@@ -1,12 +1,29 @@
 # attestation-kit: Tools for EAS attestations
 
-A UI library and a CLI tool for getting Schema and Attestation data
-from the chains where the [EAS](https://attest.org/) contracts are deployed,
-as well as registering new Schemas and creating Attestations on those chains.
+`attestation-kit` (or `atkit`) is a collection of tools accessing and creating
+schemas and attestations on the chains where the [EAS](https://attest.org/)
+contracts are deployed.
 
-The current monorepo provides the `packages/react` library with React `hooks` and
-unstyled `components` to create frontend applications that interact with EAS.
-You can find an example React web application under `example/`.
+Register schemas, create attestations, and access the stored schemas and
+attestations. The repo currently includes the following packages:
+
+### Packages
+
+| Package                      | Description                                     |
+| ---------------------------- | ----------------------------------------------- |
+| [atkit](packages/react)      | React hooks and unstyled components             |
+| [@atkit/core](packages/core) | Core functionality shared across other packages |
+| [@atkit/cli](packages/cli)   | Command line interface                          |
+
+## React hooks and unstyled components
+
+`packages/react` is a library with React `hooks` and unstyled `components`
+to create frontend applications that interact with EAS.
+
+You can find an example React web application under `example/` that you can
+run with `pnppm run dev`.
+
+## CLI
 
 To run the CLI from the root directory:
 
