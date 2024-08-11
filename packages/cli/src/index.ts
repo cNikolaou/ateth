@@ -7,9 +7,10 @@ import {
   getSchema,
   registerSchema,
   createAttestation,
+  createOffchainAttestation,
 } from '@attkit/core';
 
-import { hasValidEnvVars, getSigner } from './utils.js';
+import { hasValidEnvVars, getSigner, saveOffchainAttestation } from './utils.js';
 
 const program = new Command();
 
@@ -111,7 +112,8 @@ program
     '-e, --expiration <int>',
     '(optional) expiration time for the attestation (BigInt as string)',
   )
-  .option('--revocable', '(optional )whether the attestation is revocable')
+  .option('--revocable', '(optional) whether the attestation is revocable')
+  .option('--offchain', '(optional) create an offchain attestation')
   .action(async (options) => {
     const signer = await getSigner(options.network);
     const schemaRegistryContractAddress = contracts[chainNameToId[options.network]]?.schemaRegistry;
@@ -124,19 +126,32 @@ program
     console.log('JSON.parse(options.data)');
     console.log(JSON.parse(options.data));
 
-    const expiration = BigInt(options.expiration || 0);
+    const expirationTime = BigInt(options.expiration || 0);
 
-    const attestationUID = await createAttestation(
-      signer,
-      EASContractAddress,
-      schema,
-      options.recipient,
-      expiration,
-      options.revocable || false,
-      JSON.parse(options.data),
-    );
-
-    console.log('UID of the created attestation', attestationUID);
+    if (options.offchain) {
+      const offchainAttestation = await createOffchainAttestation(
+        signer,
+        EASContractAddress,
+        schema,
+        options.recipient,
+        expirationTime,
+        options.revocable || false,
+        JSON.parse(options.data),
+      );
+      saveOffchainAttestation(offchainAttestation);
+      console.log('Offchain attestation:', offchainAttestation);
+    } else {
+      const attestationUID = await createAttestation(
+        signer,
+        EASContractAddress,
+        schema,
+        options.recipient,
+        expirationTime,
+        options.revocable || false,
+        JSON.parse(options.data),
+      );
+      console.log('UID of the created attestation', attestationUID);
+    }
   })
   .hook('preAction', (thisCommand) => {
     if (!thisCommand.opts().network) {

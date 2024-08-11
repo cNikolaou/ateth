@@ -1,3 +1,7 @@
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+
 import { ethers } from 'ethers';
 
 export function hasValidEnvVars() {
@@ -22,4 +26,17 @@ export async function getSigner(network: string) {
   const alchemyProvider = new ethers.AlchemyProvider(network, process.env.ALCHEMY_API_KEY);
   const signer = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY || '', alchemyProvider);
   return signer;
+}
+
+export async function saveOffchainAttestation(offchainAttestation: SignedOffchainAttestation) {
+  const homeDir = os.homedir();
+  const attestationsDir = path.join(homeDir, '.attestations');
+
+  await fs.mkdirSync(attestationsDir, { recursive: true });
+
+  const filePath = path.join(attestationsDir, offchainAttestation.uid);
+  const attestationString = JSON.stringify(offchainAttestation, null, 2);
+
+  await fs.writeFileSync(filePath, attestationString, { encoding: 'utf8' });
+  console.log(`Offhchain attestation saved tp ${filePath}`);
 }
