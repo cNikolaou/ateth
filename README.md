@@ -23,6 +23,9 @@ to create frontend applications that interact with EAS.
 You can find an example React web application under `example/` that you can
 run with `pnppm run dev`.
 
+The library currently depends on [`wagmi`](https://wagmi.sh/) to connect to
+your wallet in the browser.
+
 ## CLI
 
 To run the CLI from the root directory:
