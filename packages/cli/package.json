@@ -1,5 +1,5 @@
 {
-  "name": "@ateth/cli",
+  "name": "@atkit/cli",
   "version": "0.0.2",
   "description": "",
   "type": "module",
@@ -13,9 +13,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@atkit/core": "workspace:*",
     "commander": "^12.1.0",
-    "ethers": "^6.13.2",
-    "@ateth/core": "workspace:*"
+    "ethers": "^6.13.2"
   },
   "devDependencies": {
     "@types/node": "^22.2.0",
@@ -23,6 +23,6 @@
   },
   "exports": "./dist/index.js",
   "bin": {
-    "ateth": "./dist/index.js"
+    "atkit": "./dist/index.js"
   }
 }

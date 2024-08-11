@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import { useAccount } from 'wagmi';
 import { useSchema, useCreateAttestation, useEthersSigner } from '../hooks';
-import { contracts } from '@ateth/core';
+import { contracts } from '@atkit/core';
 
 export function AttestationCreate() {
   const { chain, isConnected } = useAccount();

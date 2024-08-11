@@ -7,14 +7,14 @@ import {
   getSchema,
   registerSchema,
   createAttestation,
-} from '@ateth/core';
+} from '@atkit/core';
 
 import { hasValidEnvVars, getSigner } from './utils.js';
 
 const program = new Command();
 
 program
-  .name('ateth')
+  .name('atkit')
   .description('Create and fetch EAS attestations and attestation schemas')
   .version('0.0.1')
   .hook('preAction', () => {

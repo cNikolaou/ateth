@@ -1,6 +1,6 @@
-# at-eth: Create EAS attestations
+# attestation-kit: Tools for EAS attestations
 
-`ateth` is a UI library and a CLI tool for getting Schema and Attestation data
+A UI library and a CLI tool for getting Schema and Attestation data
 from the chains where the [EAS](https://attest.org/) contracts are deployed,
 as well as registering new Schemas and creating Attestations on those chains.
 

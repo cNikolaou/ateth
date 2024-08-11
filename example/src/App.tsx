@@ -1,6 +1,6 @@
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
-import { SchemaDisplay, AttestationDisplay, SchemaRegister, AttestationCreate } from 'ateth';
+import { SchemaDisplay, AttestationDisplay, SchemaRegister, AttestationCreate } from 'atkit';
 
 function App() {
   const account = useAccount();

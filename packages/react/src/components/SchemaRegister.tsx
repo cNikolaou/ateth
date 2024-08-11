@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import { useAccount } from 'wagmi';
-import { contracts } from '@ateth/core';
+import { contracts } from '@atkit/core';
 
 import { useSchemaRegister, useEthersSigner } from '../hooks';
 
