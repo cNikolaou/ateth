@@ -9,6 +9,7 @@ unstyled `components` to create frontend applications that interact with EAS.
 You can find an example React web application under `example/`.
 
 To run the CLI from the root directory:
+
 - build the packages with `pnpm build`
 - run the CLI with `pnpm cli`
 
