@@ -112,3 +112,49 @@ export async function createAttestation(
 
   return newAttestationUID;
 }
+
+export async function createOffchainAttestation(
+  signer: Wallet | JsonRpcSigner,
+  EASContractAddress: string,
+  schema: SchemaRecord,
+  recipient: string,
+  expirationTime: bigint,
+  revocable: boolean,
+  data: SchemaItem[],
+) {
+  console.debug(
+    '[Function: createOffchainAttestation]',
+    signer,
+    EASContractAddress,
+    schema,
+    recipient,
+    expirationTime,
+    revocable,
+    data,
+  );
+  const eas = new EAS(EASContractAddress);
+  eas.connect(signer);
+  const offchain = await eas.getOffchain();
+
+  const schemaEncoder = new SchemaEncoder(schema.schema);
+  const encodedData = schemaEncoder.encodeData(data);
+
+  console.log(encodedData);
+
+  const offchainAttestation = await offchain.signOffchainAttestation(
+    {
+      recipient,
+      expirationTime,
+      time: BigInt(Math.floor(Date.now() / 1000)),
+      revocable,
+      schema: schema.uid,
+      refUID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      data: encodedData,
+    },
+    signer,
+  );
+
+  console.debug('[Function: createOffchainAttestation] offchainAttestation', offchainAttestation);
+
+  return offchainAttestation;
+}
