@@ -1,6 +1,6 @@
 # attestation-kit: Tools for EAS attestations
 
-`attestation-kit` (or `atkit`) is a collection of tools accessing and creating
+`attestation-kit` (or `attkit`) is a collection of tools accessing and creating
 schemas and attestations on the chains where the [EAS](https://attest.org/)
 contracts are deployed.
 
@@ -11,9 +11,9 @@ attestations. The repo currently includes the following packages:
 
 | Package                      | Description                                     |
 | ---------------------------- | ----------------------------------------------- |
-| [atkit](packages/react)      | React hooks and unstyled components             |
-| [@atkit/core](packages/core) | Core functionality shared across other packages |
-| [@atkit/cli](packages/cli)   | Command line interface                          |
+| [attkit](packages/react)      | React hooks and unstyled components             |
+| [@attkit/core](packages/core) | Core functionality shared across other packages |
+| [@attkit/cli](packages/cli)   | Command line interface                          |
 
 ## React hooks and unstyled components
 

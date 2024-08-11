@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Attestation } from '@ethereum-attestation-service/eas-sdk';
 import { Wallet, JsonRpcSigner } from 'ethers';
 
-import { getAttestation } from '@atkit/core';
+import { getAttestation } from '@attkit/core';
 
 export function useAttestation(
   signer: Wallet | JsonRpcSigner | undefined,

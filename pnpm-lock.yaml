@@ -17,8 +17,8 @@ importers:
       '@tanstack/react-query':
         specifier: 5.45.1
         version: 5.45.1(react@18.3.1)
-      atkit:
-        specifier: workspace:atkit*
+      attkit:
+        specifier: workspace:attkit*
         version: link:../packages/react
       ethers:
         specifier: ^6.13.2
@@ -63,7 +63,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@atkit/core':
+      '@attkit/core':
         specifier: workspace:*
         version: link:../core
       commander:
@@ -95,7 +95,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@atkit/core':
+      '@attkit/core':
         specifier: workspace:*
         version: link:../core
       '@ethereum-attestation-service/eas-sdk':

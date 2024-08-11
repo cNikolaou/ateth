@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SchemaRecord } from '@ethereum-attestation-service/eas-sdk';
 import { Wallet, JsonRpcSigner } from 'ethers';
 
-import { getSchema } from '@atkit/core';
+import { getSchema } from '@attkit/core';
 
 export function useSchema(
   signer: Wallet | JsonRpcSigner | undefined,
