@@ -4,13 +4,25 @@
   "description": "",
   "type": "module",
   "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
     "start": "node ./dist/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ethereum",
+    "attestations",
+    "EAS",
+    "cli"
+  ],
+  "author": "Christos Nikolaou",
   "license": "MIT",
   "dependencies": {
     "@atkit/core": "workspace:*",
