@@ -9,8 +9,8 @@ attestations. The repo currently includes the following packages:
 
 ### Packages
 
-| Package                      | Description                                     |
-| ---------------------------- | ----------------------------------------------- |
+| Package                       | Description                                     |
+| ----------------------------- | ----------------------------------------------- |
 | [attkit](packages/react)      | React hooks and unstyled components             |
 | [@attkit/core](packages/core) | Core functionality shared across other packages |
 | [@attkit/cli](packages/cli)   | Command line interface                          |
