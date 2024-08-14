@@ -6,6 +6,7 @@ import {
   getAttestation,
   getSchema,
   registerSchema,
+  revokeAttestation,
   createAttestation,
   createOffchainAttestation,
 } from '@attkit/core';
@@ -176,11 +177,51 @@ program
   });
 
 program
+  .command('revoke')
+  .option('-n, --network <network>', 'specify the network (e.g. ethereum, sepolia, optimism)')
+  .option(
+    '-a, --attestation <attestationUID>',
+    'UID of the attestation to revoke to create the attestation for',
+  )
+  .option(
+    '-s, --schema <schemaUID>',
+    'UID of the schema that specified the schema for which the attestation was made',
+  )
+  .option('--offchain', '(optional) remove an offchain attestation')
+  .action(async (options) => {
+    console.log(options);
+    const signer = await getSigner(options.network);
+    const EASContractAddress = contracts[chainNameToId[options.network]]?.eas;
+
+    const offchainAttestation = await revokeAttestation(
+      signer,
+      EASContractAddress,
+      options.schema,
+      options.attestation,
+    );
+  })
+  .hook('preAction', (thisCommand) => {
+    if (!thisCommand.opts().network) {
+      console.error('You need to specify the network with "-n, --network <network>"');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().attestation) {
+      console.error(
+        'You need to specify the Attestation UID with "-a, --attestation <attestationUID>"',
+      );
+      process.exit(1);
+    }
+    if (!thisCommand.opts().schema) {
+      console.error('You need to specify the Schema UID with "-s, --schema <schemaUID>"');
+      process.exit(1);
+    }
+  });
+
+program
   .command('offchain-attestation')
   .option('--list', 'list all offchain attestations')
   .option('--show <uid>', 'show the data for the offchain attestation with UID <uid>')
   .action(async (options) => {
-    console.log(options);
     if (options.list) {
       await listAttestations();
       process.exit(0);
