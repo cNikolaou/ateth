@@ -50,13 +50,11 @@ export async function listAttestations() {
   const attestationsDir = path.join(homeDir, '.attestations');
 
   const table = new Table({
-    head: ['UID', 'Creation', 'Recipient'],
+    head: ['AttestationUID', 'SchemaUID', 'Recipient'],
   });
 
   try {
     const files = await fs.readdirSync(attestationsDir);
-
-    console.log(files);
 
     for (const file of files) {
       const filePath = path.join(attestationsDir, file);
@@ -65,7 +63,7 @@ export async function listAttestations() {
 
       table.push([
         offchainAttestation.uid,
-        offchainAttestation.message.time,
+        offchainAttestation.message.schema,
         offchainAttestation.message.recipient,
       ]);
     }
