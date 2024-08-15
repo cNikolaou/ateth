@@ -9,6 +9,7 @@ import {
   revokeAttestation,
   createAttestation,
   createOffchainAttestation,
+  revokeOffchainAttestation,
   verifyOffchainAttestation,
 } from '@attkit/core';
 
@@ -195,12 +196,20 @@ program
     const signer = await getSigner(options.network);
     const EASContractAddress = contracts[chainNameToId[options.network]]?.eas;
 
-    const offchainAttestation = await revokeAttestation(
-      signer,
-      EASContractAddress,
-      options.schema,
-      options.attestation,
-    );
+    if (options.offchain) {
+      const timestamp = await revokeOffchainAttestation(
+        signer,
+        EASContractAddress,
+        options.attestation,
+      );
+    } else {
+      const offchainAttestation = await revokeAttestation(
+        signer,
+        EASContractAddress,
+        options.schema,
+        options.attestation,
+      );
+    }
   })
   .hook('preAction', (thisCommand) => {
     if (!thisCommand.opts().network) {
@@ -213,8 +222,10 @@ program
       );
       process.exit(1);
     }
-    if (!thisCommand.opts().schema) {
-      console.error('You need to specify the Schema UID with "-s, --schema <schemaUID>"');
+    if (!thisCommand.opts().offchain && !thisCommand.opts().schema) {
+      console.error(
+        'You need to specify the Schema UID with "-s, --schema <schemaUID>" to revoke on-chain attestations',
+      );
       process.exit(1);
     }
   });
