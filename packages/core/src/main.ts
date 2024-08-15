@@ -2,8 +2,12 @@ import {
   EAS,
   SchemaEncoder,
   SchemaRegistry,
+  SignedOffchainAttestation,
+  Offchain,
+  OffchainAttestationVersion,
   type SchemaRecord,
   type SchemaItem,
+  type OffchainConfig,
 } from '@ethereum-attestation-service/eas-sdk';
 import { Wallet, JsonRpcSigner } from 'ethers';
 
@@ -183,4 +187,37 @@ export async function createOffchainAttestation(
   console.debug('[Function: createOffchainAttestation] offchainAttestation', offchainAttestation);
 
   return offchainAttestation;
+}
+
+export async function verifyOffchainAttestation(
+  signer: Wallet | JsonRpcSigner,
+  EASContractAddress: string,
+  attester: string,
+  offchainAttestation: SignedOffchainAttestation,
+) {
+  console.debug(
+    '[Function: verifyOffchainAttestation]',
+    EASContractAddress,
+    attester,
+    offchainAttestation,
+  );
+
+  const eas = new EAS(EASContractAddress);
+  eas.connect(signer);
+
+  const EAS_CONFIG: OffchainConfig = {
+    address: offchainAttestation.domain.verifyingContract,
+    version: offchainAttestation.domain.version,
+    chainId: offchainAttestation.domain.chainId,
+  };
+
+  const offchain = new Offchain(EAS_CONFIG, OffchainAttestationVersion.Version2, eas);
+
+  const isValidAttestation = offchain.verifyOffchainAttestationSignature(
+    attester,
+    offchainAttestation,
+  );
+  console.debug('[Function: verifyOffchainAttestation]', isValidAttestation);
+
+  return isValidAttestation;
 }
