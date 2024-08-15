@@ -20,6 +20,8 @@ Commands:
   get-schema [options]
   register-schema [options]
   create-attestation [options]
+  revoke [options]
   offchain-attestation [options]
+  verify-offchain [options]
   help [command]                  display help for command
 ```
