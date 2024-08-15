@@ -74,26 +74,8 @@ export async function listAttestations() {
 }
 
 export async function showAttestation(uid: string) {
-  const homeDir = os.homedir();
-  const attestationsDir = path.join(homeDir, '.attestations');
-
   try {
-    const filePath = path.join(attestationsDir, uid);
-    const attestationContent = await fs.readFileSync(filePath, 'utf8');
-
-    const bigIntReviver = (key, value) => {
-      const bigIntFields = ['chainId', 'expirationTime', 'time'];
-
-      if (bigIntFields.includes(key) && typeof value == 'string') {
-        return BigInt(value);
-      }
-      return value;
-    };
-
-    const offchainAttestation: SignedOffchainAttestation = JSON.parse(
-      attestationContent,
-      bigIntReviver,
-    );
+    const offchainAttestation = readOffchainAttestation(uid);
 
     console.log('Attestation Data');
     console.log('----------------');
