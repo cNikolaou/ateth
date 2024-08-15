@@ -143,6 +143,28 @@ export async function revokeAttestation(
   console.debug('[Function: revokeAttestation] Revoked attestation', attestationUid);
 }
 
+export async function revokeOffchainAttestation(
+  signer: Wallet | JsonRpcSigner,
+  EASContractAddress: string,
+  attestationUid: string,
+) {
+  console.debug(
+    '[Function: revokeOffchainAttestation]',
+    signer,
+    EASContractAddress,
+    attestationUid,
+  );
+  const eas = new EAS(EASContractAddress);
+  eas.connect(signer);
+
+  const tx = await eas.revokeOffchain(attestationUid);
+
+  const timestamp = await tx.wait();
+
+  console.debug('[Function: revokeOffchainAttestation] Revoked attestation', attestationUid);
+  return timestamp;
+}
+
 export async function createOffchainAttestation(
   signer: Wallet | JsonRpcSigner,
   EASContractAddress: string,
