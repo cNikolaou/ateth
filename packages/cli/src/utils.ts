@@ -82,12 +82,53 @@ export async function showAttestation(uid: string) {
   try {
     const filePath = path.join(attestationsDir, uid);
     const attestationContent = await fs.readFileSync(filePath, 'utf8');
-    const offchainAttestation: SignedOffchainAttestation = JSON.parse(attestationContent);
+
+    const bigIntReviver = (key, value) => {
+      const bigIntFields = ['chainId', 'expirationTime', 'time'];
+
+      if (bigIntFields.includes(key) && typeof value == 'string') {
+        return BigInt(value);
+      }
+      return value;
+    };
+
+    const offchainAttestation: SignedOffchainAttestation = JSON.parse(
+      attestationContent,
+      bigIntReviver,
+    );
 
     console.log('Attestation Data');
     console.log('----------------');
     console.log(offchainAttestation);
   } catch (err) {
     console.error(err);
+  }
+}
+
+export async function readOffchainAttestation(uid: string) {
+  const homeDir = os.homedir();
+  const attestationsDir = path.join(homeDir, '.attestations');
+
+  try {
+    const filePath = path.join(attestationsDir, uid);
+    const attestationContent = await fs.readFileSync(filePath, 'utf8');
+
+    const bigIntReviver = (key, value) => {
+      const bigIntFields = ['chainId', 'expirationTime', 'time'];
+
+      if (bigIntFields.includes(key) && typeof value == 'string') {
+        return BigInt(value);
+      }
+      return value;
+    };
+
+    const offchainAttestation: SignedOffchainAttestation = JSON.parse(
+      attestationContent,
+      bigIntReviver,
+    );
+
+    return offchainAttestation;
+  } catch (err) {
+    console.error('Error while reading offchain attestation:', err);
   }
 }

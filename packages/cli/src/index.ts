@@ -9,6 +9,7 @@ import {
   revokeAttestation,
   createAttestation,
   createOffchainAttestation,
+  verifyOffchainAttestation,
 } from '@attkit/core';
 
 import {
@@ -17,6 +18,7 @@ import {
   saveOffchainAttestation,
   listAttestations,
   showAttestation,
+  readOffchainAttestation,
 } from './utils.js';
 
 const program = new Command();
@@ -229,6 +231,44 @@ program
     if (options.show) {
       await showAttestation(options.show);
       process.exit(0);
+    }
+  });
+
+program
+  .command('verify-offchain')
+  .option('-n, --network <network>', 'specify the network (e.g. ethereum, sepolia, optimism)')
+  .option('-u, --attestation-uid <uid>', 'UID of the offchain attestation')
+  .option('-a, --attester <attesterAddress>', 'wallet address of the attester')
+  .action(async (options) => {
+    const signer = await getSigner(options.network);
+    const EASContractAddress = contracts[chainNameToId[options.network]]?.eas;
+    const offchainAttestation = await readOffchainAttestation(options.attestationUid);
+
+    const isValidAttestation = await verifyOffchainAttestation(
+      signer,
+      EASContractAddress,
+      options.attester,
+      offchainAttestation,
+    );
+
+    console.log(`Is attestation ${offchainAttestation.uid} valid? ${isValidAttestation}`);
+  })
+  .hook('preAction', (thisCommand) => {
+    if (!thisCommand.opts().network) {
+      console.error('You need to specify the network with "-n, --network <network>"');
+      process.exit(1);
+    }
+    if (!thisCommand.opts().attestationUid) {
+      console.error(
+        'You need to specify the Attestation UID with "-u, --attestation-uid <attestationUID>"',
+      );
+      process.exit(1);
+    }
+    if (!thisCommand.opts().attester) {
+      console.error(
+        'You need to specify the wallet of the attester with "-a, --attester <attesterAddress>"',
+      );
+      process.exit(1);
     }
   });
 
